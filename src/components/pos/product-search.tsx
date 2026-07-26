@@ -16,6 +16,7 @@ interface ProductResult {
   barcode?: string | null;
   sku?: string | null;
   category?: string | null;
+  imageUrl?: string | null;
 }
 
 export function ProductSearch() {
