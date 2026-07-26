@@ -197,11 +197,22 @@ export function ProductSearch() {
                   )}
                 >
                   <div className="flex w-full items-start justify-between gap-1">
+                    
                     <p className="text-xs font-semibold leading-tight line-clamp-2 flex-1">
                       {p.name}
                     </p>
                     <Plus className="h-3.5 w-3.5 shrink-0 text-muted-foreground mt-0.5" />
                   </div>
+                  {p.imageUrl ? (
+                      <div className="flex w-full justify-center">
+                     <img
+                      src={p.imageUrl} 
+                      alt="Product preview" 
+                      className="rounded-md object-cover" 
+                    />
+                    </div>
+                    ):("")}
+
                   <div className="flex w-full items-end justify-between mt-1.5">
                     <span className="text-sm font-bold text-primary">
                       {formatCurrency(p.price)}

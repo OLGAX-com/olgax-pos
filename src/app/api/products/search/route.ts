@@ -5,7 +5,16 @@ export async function GET(req: NextRequest) {
   const q = req.nextUrl.searchParams.get("q") ?? "";
 
   if (!q.trim()) {
-    return NextResponse.json([]);
+    const products = await prisma.product.findMany({
+      where: {
+        active: true
+      },
+      orderBy: {name: "asc"}
+
+    });
+    return NextResponse.json(
+      products.map((p: typeof products[number]) => ({ ...p, price: parseFloat(p.price.toString()) }))
+    );
   }
 
   const products = await prisma.product.findMany({
