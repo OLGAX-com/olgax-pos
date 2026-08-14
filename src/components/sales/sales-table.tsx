@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { useTranslations } from "next-intl";
 import { RotateCcw } from "lucide-react";
-import { formatCurrency } from "@/lib/utils";
+import { useFormatCurrency } from "@/contexts/settings-context";
 import { RefundModal } from "./refund-modal";
 
 interface SaleItem {
@@ -33,6 +33,7 @@ interface SalesTableProps {
 export function SalesTable({ sales }: SalesTableProps) {
   const t = useTranslations("sales");
   const tr = useTranslations("receipt");
+  const formatCurrency = useFormatCurrency();
   const [expanded, setExpanded] = useState<string | null>(null);
   const [refunding, setRefunding] = useState<Sale | null>(null);
 
@@ -133,8 +134,8 @@ export function SalesTable({ sales }: SalesTableProps) {
                       {sale.items.map((item, i) => {
                         const itemKey = `${item.id ?? "no-item-id"}-${saleKey}-${i}`;
                         return (
-                          <>
-                            <tr key={itemKey}>
+                          <Fragment key={itemKey}>
+                            <tr>
                               <td className="py-1">{item.name}</td>
                               <td className="text-right py-1">{item.quantity}</td>
                               <td className="text-right py-1">
@@ -145,11 +146,11 @@ export function SalesTable({ sales }: SalesTableProps) {
                               </td>
                             </tr>
                             {item.notes && (
-                              <tr key={`${itemKey}-notes`}>
+                              <tr>
                                 <td colSpan={4} className="pb-1 pl-3 text-[10px] italic text-muted-foreground">{item.notes}</td>
                               </tr>
                             )}
-                          </>
+                          </Fragment>
                         );
                       })}
                     </tbody>

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { X, RotateCcw } from "lucide-react";
-import { formatCurrency } from "@/lib/utils";
+import { useFormatCurrency } from "@/contexts/settings-context";
 import { RefundReceiptModal } from "@/components/receipt/refund-receipt-modal";
 
 interface RefundItem {
@@ -28,6 +28,7 @@ interface RefundModalProps {
 }
 
 export function RefundModal({ saleId, saleTotal, items, onClose }: RefundModalProps) {
+  const formatCurrency = useFormatCurrency();
   const router = useRouter();
   const [selected, setSelected] = useState<Set<string>>(() => new Set(items.map((i) => i.id)));
   const [qtys, setQtys] = useState<Record<string, number>>(

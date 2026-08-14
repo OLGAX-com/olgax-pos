@@ -127,6 +127,7 @@ export function SettingsForm({ settings }: Props) {
   });
 
   const storageProvider = watch("storageProvider");
+  const currencySymbol = watch("currency") || settings.currency || "$";
 
   async function onSubmit(values: SettingsFormValues) {
     const fd = new FormData();
@@ -247,11 +248,11 @@ export function SettingsForm({ settings }: Props) {
           />
         </div>
         <div className="grid grid-cols-2 gap-4">
-          {field("Earn Rate (pts per $1)", "loyaltyEarnRate", { type: "number", step: "0.01", min: "0", placeholder: "1" })}
-          {field("Redeem Rate (pts per $1 off)", "loyaltyRedeemValue", { type: "number", step: "1", min: "1", placeholder: "100" })}
+          {field(`Earn Rate (pts per ${currencySymbol}1)`, "loyaltyEarnRate", { type: "number", step: "0.01", min: "0", placeholder: "1" })}
+          {field(`Redeem Rate (pts per ${currencySymbol}1 off)`, "loyaltyRedeemValue", { type: "number", step: "1", min: "1", placeholder: "100" })}
         </div>
         <p className="text-xs text-muted-foreground">
-          Example: Earn Rate = 1, Redeem Rate = 100 → customer earns 1 pt per $1 spent, and 100 pts = $1 discount.
+          Example: Earn Rate = 1, Redeem Rate = 100 → customer earns 1 pt per {currencySymbol}1 spent, and 100 pts = {currencySymbol}1 discount.
         </p>
       </section>
 

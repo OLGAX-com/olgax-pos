@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { unstable_noStore as noStore } from "next/cache";
 import { prisma } from "@/lib/db";
 import { serialize } from "@/lib/serialize";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency as formatCurrencyBase } from "@/lib/utils";
 import { Edit, Package, TrendingUp, TrendingDown } from "lucide-react";
 import { StockAdjustButton } from "@/components/products/stock-adjust-button";
 import { DbError } from "@/components/ui/db-error";
@@ -25,6 +25,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ProductDetailPage({ params }: Props) {
   noStore();
   const { id } = await params;
+  const businessSettings = await prisma.businessSettings.findUnique({ where: { id: "singleton" } }).catch(() => null);
+  const formatCurrency = (amount: number | string) =>
+    formatCurrencyBase(amount, businessSettings?.currency, businessSettings?.currencyDecimals);
 
   let product;
   let adjustments;

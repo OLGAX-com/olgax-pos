@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { useCartStore, PaymentMethod } from "@/store/cart";
-import { formatCurrency } from "@/lib/utils";
+import { useFormatCurrency } from "@/contexts/settings-context";
 import { useRouter } from "next/navigation";
 import { PauseCircle, ClipboardList, SplitSquareHorizontal, X, Percent, RotateCcw, Star } from "lucide-react";
 
@@ -29,6 +29,7 @@ const PAYMENT_METHODS: PaymentMethod[] = ["CASH", "CARD", "OTHER"];
 export function PaymentPanel({ taxRate, onClear, onSaleComplete, onHoldOrders, customerId }: PaymentPanelProps) {
   const t = useTranslations("pos");
   const router = useRouter();
+  const formatCurrency = useFormatCurrency();
   const {
     items,
     paymentMethod,
@@ -353,7 +354,7 @@ export function PaymentPanel({ taxRate, onClear, onSaleComplete, onHoldOrders, c
             )}
           </div>
           <p className="text-[10px] text-muted-foreground">
-            {loyaltyInfo.earnRate} pt per $1 Â· {loyaltyInfo.redeemValue} pts = $1 off
+            {loyaltyInfo.earnRate} pt per {formatCurrency(1)} · {loyaltyInfo.redeemValue} pts = {formatCurrency(1)} off
           </p>
         </div>
       )}

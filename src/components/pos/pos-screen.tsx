@@ -4,7 +4,8 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCartStore } from "@/store/cart";
-import { formatCurrency, cn } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { useSettings, useFormatCurrency } from "@/contexts/settings-context";
 import { Minus, Plus, Trash2, ClipboardList, MessageSquarePlus } from "lucide-react";
 import { ProductSearch } from "./product-search";
 import { PaymentPanel } from "./payment-panel";
@@ -16,21 +17,14 @@ import { NumericKeypad } from "@/components/ui/numeric-keypad";
 import { ReceiptModal } from "@/components/receipt/receipt-modal";
 import { KeyboardShortcutsModal } from "./keyboard-shortcuts-modal";
 import { usePosKeyboardShortcuts } from "@/hooks/use-pos-keyboard-shortcuts";
-import type { ReceiptData, ReceiptSettings } from "@/components/receipt/receipt";
+import type { ReceiptData } from "@/components/receipt/receipt";
 
 const DEFAULT_TAX_RATE = 0; // overridden via business settings
 
-const DEFAULT_RECEIPT_SETTINGS: ReceiptSettings = {
-  name: "My Shop",
-  logoUrl: null,
-  currency: "$",
-  currencyDecimals: 2,
-  taxName: "Tax",
-  receiptFooter: "Thank you for your business!",
-};
-
 export function POSScreen() {
   const t = useTranslations("pos");
+  const { settings: businessSettings } = useSettings();
+  const formatCurrency = useFormatCurrency();
   const [taxRate] = useState(DEFAULT_TAX_RATE);
   const [showHeldOrders, setShowHeldOrders] = useState(false);
   const [confirmClear, setConfirmClear] = useState(false);
@@ -399,7 +393,7 @@ export function POSScreen() {
           open={true}
           onClose={() => setReceiptData(null)}
           data={receiptData}
-          settings={DEFAULT_RECEIPT_SETTINGS}
+          settings={businessSettings}
         />
       )}
 

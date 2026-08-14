@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { Pencil, Trash2, AlertTriangle, PackagePlus } from "lucide-react";
-import { formatCurrency } from "@/lib/utils";
+import { useFormatCurrency } from "@/contexts/settings-context";
 import { deleteProduct } from "@/app/actions/product-actions";
 import { StockAdjustModal } from "./stock-adjust-modal";
 
@@ -25,6 +25,7 @@ interface ProductTableProps {
 
 export function ProductTable({ products }: ProductTableProps) {
   const t = useTranslations("products");
+  const formatCurrency = useFormatCurrency();
   const [adjusting, setAdjusting] = useState<Product | null>(null);
 
   if (products.length === 0) {

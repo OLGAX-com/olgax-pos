@@ -1,10 +1,14 @@
 import { unstable_noStore as noStore } from "next/cache";
 import { prisma } from "@/lib/db";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency as formatCurrencyBase } from "@/lib/utils";
 import { DbError } from "@/components/ui/db-error";
 
 export async function ReportsSummary() {
   noStore();
+  const businessSettings = await prisma.businessSettings.findUnique({ where: { id: "singleton" } }).catch(() => null);
+  const formatCurrency = (amount: number | string) =>
+    formatCurrencyBase(amount, businessSettings?.currency, businessSettings?.currencyDecimals);
+
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 

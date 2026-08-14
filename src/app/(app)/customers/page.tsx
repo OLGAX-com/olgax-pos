@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { formatCurrency } from "@/lib/utils";
+import { useFormatCurrency } from "@/contexts/settings-context";
 import { Search, Plus, Loader2, Edit, Trash2, ChevronLeft, ChevronRight, GitMerge, Phone, AlertTriangle, Check } from "lucide-react";
 
 type Customer = {
@@ -22,6 +22,7 @@ type Customer = {
 export default function CustomersPage() {
   const t = useTranslations("customers");
   const tc = useTranslations("common");
+  const formatCurrency = useFormatCurrency();
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);

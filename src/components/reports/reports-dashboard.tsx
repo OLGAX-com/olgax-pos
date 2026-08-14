@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useTranslations } from "next-intl";
-import { formatCurrency } from "@/lib/utils";
+import { useFormatCurrency } from "@/contexts/settings-context";
 import {
   BarChart,
   Bar,
@@ -42,6 +42,7 @@ const PIE_COLORS = ["#0f2044", "#f5c518", "#4fb8a5", "#e26c1a", "#9b5cc9"];
 export function ReportsDashboard() {
   const t = useTranslations("reports");
   const tp = useTranslations("products");
+  const formatCurrency = useFormatCurrency();
   const [range, setRange] = useState<Range>("today");
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
@@ -302,9 +303,9 @@ export function ReportsDashboard() {
                     return d.toLocaleDateString("en-US", { month: "short", day: "2-digit" });
                   }}
                 />
-                <YAxis tick={{ fontSize: 10 }} tickFormatter={(v) => `$${v}`} width={48} />
+                <YAxis tick={{ fontSize: 10 }} tickFormatter={(v) => formatCurrency(v)} width={48} />
                 <Tooltip
-                  formatter={(v: number | undefined) => [v !== undefined ? formatCurrency(v) : "$0.00", "Revenue"]}
+                  formatter={(v: number | undefined) => [formatCurrency(v ?? 0), "Revenue"]}
                   labelFormatter={(l) => new Date(l + "T00:00:00").toLocaleDateString()}
                   contentStyle={{ fontSize: 12 }}
                 />

@@ -4,6 +4,7 @@ import { unstable_noStore as noStore } from "next/cache";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { AppShell } from "@/components/layout/app-shell";
+import { SettingsProvider, DEFAULT_BUSINESS_SETTINGS } from "@/contexts/settings-context";
 
 export const dynamic = "force-dynamic";
 
@@ -55,13 +56,24 @@ export default async function AppLayout({
     "--sidebar-primary": accent,
   } as React.CSSProperties;
 
+  const businessSettings = {
+    name: settings?.name ?? DEFAULT_BUSINESS_SETTINGS.name,
+    logoUrl: settings?.logoUrl ?? DEFAULT_BUSINESS_SETTINGS.logoUrl,
+    currency: settings?.currency ?? DEFAULT_BUSINESS_SETTINGS.currency,
+    currencyDecimals: settings?.currencyDecimals ?? DEFAULT_BUSINESS_SETTINGS.currencyDecimals,
+    taxName: settings?.taxName ?? DEFAULT_BUSINESS_SETTINGS.taxName,
+    receiptFooter: settings?.receiptFooter ?? DEFAULT_BUSINESS_SETTINGS.receiptFooter,
+  };
+
   return (
     <>
       {/* eslint-disable-next-line react/no-danger */}
       <style dangerouslySetInnerHTML={{ __html: brandingCSS }} />
-      <AppShell user={session.user} cssVars={cssVars}>
-        {children}
-      </AppShell>
+      <SettingsProvider initialSettings={businessSettings}>
+        <AppShell user={session.user} cssVars={cssVars}>
+          {children}
+        </AppShell>
+      </SettingsProvider>
     </>
   );
 }

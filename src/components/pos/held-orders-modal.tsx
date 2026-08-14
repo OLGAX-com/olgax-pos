@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useCartStore } from "@/store/cart";
 import { X, History, PackagePlus } from "lucide-react";
-import { formatCurrency } from "@/lib/utils";
+import { useFormatCurrency } from "@/contexts/settings-context";
 
 interface HeldOrder {
   id: string;
@@ -23,6 +23,7 @@ interface HeldOrdersModalProps {
 }
 
 export function HeldOrdersModal({ open, onClose }: HeldOrdersModalProps) {
+  const formatCurrency = useFormatCurrency();
   const [orders, setOrders] = useState<HeldOrder[]>([]);
   const [loading, setLoading] = useState(false);
   const { items, setDiscount, setPaymentMethod, addItem, clearCart } = useCartStore();

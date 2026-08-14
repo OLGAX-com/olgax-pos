@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { serialize } from "@/lib/serialize";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency as formatCurrencyBase } from "@/lib/utils";
 import { Star } from "lucide-react";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 
@@ -15,6 +15,9 @@ export default async function CustomerProfilePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const businessSettings = await prisma.businessSettings.findUnique({ where: { id: "singleton" } });
+  const formatCurrency = (amount: number | string) =>
+    formatCurrencyBase(amount, businessSettings?.currency, businessSettings?.currencyDecimals);
   const raw = await prisma.customer.findUnique({
     where: { id },
     include: {

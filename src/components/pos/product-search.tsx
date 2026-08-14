@@ -4,7 +4,8 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { Search, Plus, AlertTriangle } from "lucide-react";
 import { useCartStore } from "@/store/cart";
-import { formatCurrency, cn } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { useFormatCurrency } from "@/contexts/settings-context";
 import { toast } from "sonner";
 import { getDeviceSettings, playErrorBeep } from "@/hooks/use-device-settings";
 
@@ -21,6 +22,7 @@ interface ProductResult {
 
 export function ProductSearch() {
   const t = useTranslations("pos");
+  const formatCurrency = useFormatCurrency();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<ProductResult[]>([]);
   const [allProducts, setAllProducts] = useState<ProductResult[]>([]);
