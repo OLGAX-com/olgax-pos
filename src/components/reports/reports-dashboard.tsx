@@ -37,7 +37,13 @@ interface PieSlice { method: string; value: number }
 interface TopProduct { name: string; qty: number; revenue: number }
 interface LowStockProduct { id: string; name: string; sku: string | null; stock: number; lowStockThreshold: number; category: string | null }
 
-const PIE_COLORS = ["#0f2044", "#f5c518", "#4fb8a5", "#e26c1a", "#9b5cc9"];
+const PIE_COLORS = [
+  "var(--chart-1)",
+  "var(--chart-2)",
+  "var(--chart-3)",
+  "var(--chart-4)",
+  "var(--chart-5)",
+];
 
 export function ReportsDashboard() {
   const t = useTranslations("reports");
@@ -309,7 +315,7 @@ export function ReportsDashboard() {
                   labelFormatter={(l) => new Date(l + "T00:00:00").toLocaleDateString()}
                   contentStyle={{ fontSize: 12 }}
                 />
-                <Bar dataKey="revenue" fill="#1e3a5f" radius={[3, 3, 0, 0]} isAnimationActive={false} />
+                <Bar dataKey="revenue" fill="var(--primary)" radius={[3, 3, 0, 0]} isAnimationActive={false} />
               </BarChart>
             </ResponsiveContainer>
           )}

@@ -128,6 +128,39 @@
   }
 }
 
+.dark .recharts-cartesian-axis-tick text {
+  fill: var(--muted-foreground) !important;
+}
+
+.dark .recharts-cartesian-axis-line,
+.dark .recharts-cartesian-axis-tick-line {
+  stroke: var(--border) !important;
+}
+
+.dark .recharts-pie-label-text {
+  fill: var(--foreground) !important;
+}
+
+.dark .recharts-legend-item-text {
+  color: var(--foreground) !important;
+}
+
+.dark .recharts-default-tooltip {
+  background-color: var(--popover) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  color: var(--popover-foreground) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+}
+
+.dark .recharts-tooltip-item,
+.dark .recharts-tooltip-item-name,
+.dark .recharts-tooltip-item-value,
+.dark .recharts-tooltip-item-separator,
+.dark .recharts-tooltip-label {
+  color: var(--popover-foreground) !important;
+}
+
 @media print {
   @page {
     margin: 1.5cm;
