@@ -335,7 +335,7 @@ export function ReportsDashboard() {
                   nameKey="method"
                   cx="50%"
                   cy="45%"
-                  outerRadius={72}
+                  outerRadius={60}
                   label={({ method, percent }) => `${method} ${((percent ?? 0) * 100).toFixed(0)}%`}
                   labelLine={false}
                   isAnimationActive={false}

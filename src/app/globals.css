@@ -137,6 +137,10 @@
   stroke: var(--border) !important;
 }
 
+.recharts-pie-label-text {
+  font-size: 11px;
+}
+
 .dark .recharts-pie-label-text {
   fill: var(--foreground) !important;
 }
@@ -165,6 +169,19 @@
   @page {
     margin: 1.5cm;
     size: A4 portrait;
+  }
+
+  .dark {
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.15 0.06 253);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.15 0.06 253);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.15 0.06 253);
+    --muted: oklch(0.94 0.01 253);
+    --muted-foreground: oklch(0.50 0.03 253);
+    --border: oklch(0.88 0.015 253);
+    --primary: oklch(0.20 0.085 253);
   }
 
   /* Kill browser chrome scrollbars / decoration */
@@ -199,10 +216,16 @@
   .recharts-responsive-container {
     width: 100% !important;
     min-width: 200px !important;
+    height: 220px !important;
   }
-  .recharts-wrapper,
+  .recharts-wrapper {
+    width: 100% !important;
+    height: 220px !important;
+  }
   .recharts-surface {
     width: 100% !important;
+    height: 220px !important;
+    overflow: visible !important;
   }
 
   /* Disable Recharts clip-path animations that show placeholder icons */
@@ -212,8 +235,10 @@
     clip-path: none !important;
   }
 
-  /* Chart bars: override CSS-variable fill to a solid printable blue */
-  .recharts-bar-rectangle path {
+  /* Chart bars: solid printable blue */
+  .recharts-bar-rectangle path,
+  .recharts-bar-rectangle rect,
+  .recharts-rectangle {
     fill: #1e3a5f !important;
   }
 
