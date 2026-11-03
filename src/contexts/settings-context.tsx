@@ -9,6 +9,7 @@ export interface BusinessSettingsData {
   currency: string;
   currencyDecimals: number;
   taxName: string;
+  taxRate: number;
   receiptFooter: string;
 }
 
@@ -18,6 +19,7 @@ export const DEFAULT_BUSINESS_SETTINGS: BusinessSettingsData = {
   currency: "$",
   currencyDecimals: 2,
   taxName: "Tax",
+  taxRate: 0,
   receiptFooter: "Thank you for your business!",
 };
 

@@ -19,13 +19,12 @@ import { KeyboardShortcutsModal } from "./keyboard-shortcuts-modal";
 import { usePosKeyboardShortcuts } from "@/hooks/use-pos-keyboard-shortcuts";
 import type { ReceiptData } from "@/components/receipt/receipt";
 
-const DEFAULT_TAX_RATE = 0; // overridden via business settings
 
 export function POSScreen() {
   const t = useTranslations("pos");
   const { settings: businessSettings } = useSettings();
   const formatCurrency = useFormatCurrency();
-  const [taxRate] = useState(DEFAULT_TAX_RATE);
+  const taxRate = businessSettings.taxRate;
   const [showHeldOrders, setShowHeldOrders] = useState(false);
   const [confirmClear, setConfirmClear] = useState(false);
   const [voidTargetId, setVoidTargetId] = useState<string | null>(null);

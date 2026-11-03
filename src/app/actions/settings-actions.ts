@@ -5,7 +5,10 @@ import { prisma } from "@/lib/db";
 
 export async function updateSettings(formData: FormData) {
   const raw = Object.fromEntries(formData.entries());
-  const taxRatePercent = parseFloat(raw.taxRate as string) || 0;
+  const taxRatePercent = Number(raw.taxRate ?? 0);
+  if (!Number.isFinite(taxRatePercent) || taxRatePercent < 0 || taxRatePercent > 100) {
+    throw new Error("Invalid tax rate");
+  }
 
   const shared = {
     name: (raw.name as string) || "My Store",

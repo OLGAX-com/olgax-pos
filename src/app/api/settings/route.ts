@@ -12,6 +12,7 @@ export async function GET() {
     currency: s.currency,
     currencyDecimals: s.currencyDecimals,
     taxName: s.taxName,
+    taxRate: Number(s.taxRate),
     receiptFooter: s.receiptFooter,
   });
 }
