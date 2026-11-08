@@ -62,6 +62,9 @@ export default async function AppLayout({
     currency: settings?.currency ?? DEFAULT_BUSINESS_SETTINGS.currency,
     currencyDecimals: settings?.currencyDecimals ?? DEFAULT_BUSINESS_SETTINGS.currencyDecimals,
     taxName: settings?.taxName ?? DEFAULT_BUSINESS_SETTINGS.taxName,
+    taxRate: settings?.taxRate != null
+      ? Number(settings.taxRate)
+      : DEFAULT_BUSINESS_SETTINGS.taxRate,
     receiptFooter: settings?.receiptFooter ?? DEFAULT_BUSINESS_SETTINGS.receiptFooter,
   };
 
