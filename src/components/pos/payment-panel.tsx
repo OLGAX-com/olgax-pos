@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
@@ -203,7 +203,7 @@ export function PaymentPanel({ taxRate, onClear, onSaleComplete, onHoldOrders, c
   }
 
   return (
-    <div className="border-t p-4 space-y-3">
+    <div className="shrink-0 border-t p-4 space-y-3">
       {/* Hold / Recall row */}
       <div className="flex gap-2">
         <button

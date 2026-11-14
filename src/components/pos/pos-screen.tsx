@@ -188,9 +188,9 @@ export function POSScreen() {
       </div>
 
       {/* Right: cart + payment */}
-      <div className={cn("flex flex-col lg:w-[26rem] lg:flex-none lg:shrink-0", mobileTab === "search" ? "hidden lg:flex" : "flex flex-1")}>
+      <div className={cn("flex flex-col min-h-0 overflow-y-auto lg:w-[26rem] lg:flex-none lg:shrink-0", mobileTab === "search" ? "hidden lg:flex" : "flex flex-1")}>
         {/* Cart toolbar */}
-        <div className="flex items-center justify-between border-b px-4 py-2">
+        <div className="shrink-0 flex items-center justify-between border-b px-4 py-2">
           <span className="text-sm font-semibold text-muted-foreground">
             Cart {items.length > 0 ? `(${items.length})` : ""}
           </span>
@@ -213,12 +213,12 @@ export function POSScreen() {
         </div>
 
         {/* Customer capture */}
-        <div className="relative z-10 border-b border-border bg-background px-4 py-2.5">
+        <div className="relative z-10 shrink-0 border-b border-border bg-background px-4 py-2.5">
           <CustomerCapture value={customer} onChange={setCustomer} />
         </div>
 
         {/* Cart items */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-2">
+        <div className="flex-1 min-h-[12rem] overflow-y-auto p-4 space-y-2">
           {items.length === 0 ? (
             <div className="flex h-40 items-center justify-center text-muted-foreground text-sm">
               {t("cart_empty")}
@@ -244,7 +244,7 @@ export function POSScreen() {
                   </div>
 
                   {/* Qty controls */}
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-1 shrink-0">
                     <button
                       onClick={() => updateQuantity(item.productId, item.quantity - 1)}
                       className="h-8 w-8 rounded border flex items-center justify-center hover:bg-accent transition-colors"
@@ -285,7 +285,7 @@ export function POSScreen() {
                   </div>
 
                   {/* Line total */}
-                  <span className="text-sm font-semibold w-16 text-right">
+                  <span className="text-sm font-semibold w-16 text-right shrink-0">
                     {formatCurrency(item.price * item.quantity)}
                   </span>
 
@@ -331,7 +331,7 @@ export function POSScreen() {
         </div>
 
         {/* Order summary */}
-        <div className="border-t p-4 space-y-1 text-sm">
+        <div className="shrink-0 border-t p-4 space-y-1 text-sm">
           <div className="flex justify-between">
             <span className="text-muted-foreground">{t("subtotal")}</span>
             <span>{formatCurrency(sub)}</span>
