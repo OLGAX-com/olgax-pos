@@ -7,6 +7,7 @@ How to deploy Olgax POS in production.
 ## Table of Contents
 
 - [Docker Compose (Recommended)](#docker-compose-recommended)
+- [Docker Hub releases](#docker-hub-releases)
 - [Serverless Deployments (Vercel / Netlify)](#serverless-deployments-vercel--netlify)
 - [Managed 3rd-Party PostgreSQL Providers](#managed-3rd-party-postgresql-providers)
 - [Environment Variables for Production](#environment-variables-for-production)
@@ -39,6 +40,28 @@ docker compose logs -f web
 ```
 
 The web service will be available on port **3000**. Put it behind Nginx or Caddy for HTTPS.
+
+### Docker Hub releases
+
+Once a release image has been published, pull its GitHub Release tag from the
+public `olgaxcom/pos` repository. For example, for release `v0.2.2`:
+
+```bash
+docker pull olgaxcom/pos:v0.2.2
+```
+
+Pin a version in production. To use the prebuilt image with Compose, replace the
+`web` service's `build:` block with `image: olgaxcom/pos:v0.2.2`, using your
+chosen release tag. Keep the PostgreSQL service and configure production
+credentials before starting the stack. Pulling the image alone does not start
+PostgreSQL or configure the POS.
+
+Maintainers: the [CI / Docker Hub workflow](../.github/workflows/docker.yml) runs
+Vitest and TypeScript checks before building the image. Pull requests and pushes
+to `main` build without signing in to Docker Hub or publishing. Publishing a
+GitHub Release pushes the release tag; stable releases also update `latest`.
+The workflow expects the Actions variable `DOCKERHUB_USERNAME` and secret
+`DOCKERHUB_TOKEN` with permission to push to the public `olgaxcom/pos` repository.
 
 ---
 

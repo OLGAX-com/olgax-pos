@@ -5,4 +5,5 @@ out
 .github
 *.local
 pnpm-debug.log
-.env
+**/.env
+**/.env.*
