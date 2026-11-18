@@ -74,13 +74,13 @@ services:
   postgres:
     image: postgres:16-alpine
     environment:
-      POSTGRES_USER: olgax
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}"
       POSTGRES_DB: olgax_pos
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "olgax", "-d", "olgax_pos"]
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "olgax_pos"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -93,7 +93,7 @@ services:
     ports:
       - "127.0.0.1:3000:3000"
     environment:
-      DATABASE_URL: "postgresql://olgax:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@postgres:5432/olgax_pos?schema=public"
+      DATABASE_URL: "postgresql://postgres:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@postgres:5432/olgax_pos?schema=public"
       BETTER_AUTH_SECRET: "${BETTER_AUTH_SECRET:?Set BETTER_AUTH_SECRET in .env}"
       BETTER_AUTH_URL: "${BETTER_AUTH_URL:-http://localhost:3000}"
       NEXT_PUBLIC_APP_URL: "${NEXT_PUBLIC_APP_URL:-http://localhost:3000}"
