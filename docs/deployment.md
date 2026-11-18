@@ -50,11 +50,11 @@ public `olgaxcom/pos` repository. For example, for release `v0.2.2`:
 docker pull olgaxcom/pos:v0.2.2
 ```
 
-Pin a version in production. To use the prebuilt image with Compose, replace the
-`web` service's `build:` block with `image: olgaxcom/pos:v0.2.2`, using your
-chosen release tag. Keep the PostgreSQL service and configure production
-credentials before starting the stack. Pulling the image alone does not start
-PostgreSQL or configure the POS.
+Follow the [Docker quick start](../README.md#quick-start-docker--recommended)
+for a standalone Compose setup with PostgreSQL, generated secrets, and first-run
+instructions. Pin a version in production by replacing `olgaxcom/pos:latest`
+with your chosen release tag. Pulling the image alone does not start PostgreSQL
+or configure the POS.
 
 Maintainers: the [CI / Docker Hub workflow](../.github/workflows/docker.yml) runs
 Vitest and TypeScript checks before building the image. Pull requests and pushes
