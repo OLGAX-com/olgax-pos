@@ -60,23 +60,99 @@
 
 ## Quick Start (Docker — recommended)
 
-```bash
-# 1. Clone
-git clone https://github.com/olgax/olgax-pos.git
-cd olgax-pos
+Install Docker with Docker Compose v2 or newer. No source checkout or separate
+PostgreSQL installation is needed: Compose starts the published
+[`olgaxcom/pos:latest`](https://hub.docker.com/r/olgaxcom/pos) image and a separate
+PostgreSQL container together.
 
-# 2. Configure secrets
-cp .env.example .env
-# Edit .env: set BETTER_AUTH_SECRET to a long random string
+### 1. Create `compose.yaml`
 
-# 3. Start
-docker compose up -d
+In a new folder, save the following as `compose.yaml`:
 
-# 4. Open in browser
-open http://localhost:3000
+```yaml
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: olgax
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}"
+      POSTGRES_DB: olgax_pos
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "olgax", "-d", "olgax_pos"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  web:
+    image: olgaxcom/pos:latest
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      DATABASE_URL: "postgresql://olgax:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@postgres:5432/olgax_pos?schema=public"
+      BETTER_AUTH_SECRET: "${BETTER_AUTH_SECRET:?Set BETTER_AUTH_SECRET in .env}"
+      BETTER_AUTH_URL: "${BETTER_AUTH_URL:-http://localhost:3000}"
+      NEXT_PUBLIC_APP_URL: "${NEXT_PUBLIC_APP_URL:-http://localhost:3000}"
+
+volumes:
+  postgres_data:
 ```
 
-The first time you open the app you will be guided through a setup wizard that migrates the database and creates your admin account.
+`postgres` is the Compose service name, so it is the database hostname **inside**
+the web container. Leave it as `postgres`, not `localhost`. The database port is
+not published to your host.
+
+### 2. Create `.env` next to `compose.yaml`
+
+```dotenv
+POSTGRES_PASSWORD=replace_with_first_generated_value
+BETTER_AUTH_SECRET=replace_with_second_generated_value
+BETTER_AUTH_URL=http://localhost:3000
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
+
+Replace the placeholders with **two different random values**. Run
+`openssl rand -hex 32` twice, or run this in PowerShell to generate both values:
+
+```powershell
+$rng = [System.Security.Cryptography.RandomNumberGenerator]::Create()
+try {
+    foreach ($key in 'POSTGRES_PASSWORD', 'BETTER_AUTH_SECRET') {
+        $bytes = New-Object byte[] 32
+        $rng.GetBytes($bytes)
+        "$key=$([BitConverter]::ToString($bytes).Replace('-', '').ToLowerInvariant())"
+    }
+} finally {
+    $rng.Dispose()
+}
+```
+
+Use the generated hex format for the database password so it can be inserted
+into `DATABASE_URL` without URL encoding. `BETTER_AUTH_SECRET` signs auth data;
+it is not your admin password. Keep `.env` private and preserve these values
+across restarts.
+
+For local use, leave both URLs as `http://localhost:3000` and open that exact
+address. If you change the host port, update both URLs to match. For access from
+another device or a public domain, see the
+[HTTPS deployment guide](docs/deployment.md#reverse-proxy-nginx--caddy).
+
+### 3. Start and set up Olgax POS
+
+```bash
+docker compose pull
+docker compose up -d
+```
+
+Open [http://localhost:3000](http://localhost:3000). In the setup wizard, click
+**Initialize DB**, create your admin account, and save your store settings.
+PostgreSQL data persists in the `postgres_data` volume; `docker compose down`
+stops the stack without deleting that data. Use a versioned image tag instead
+of `latest` if you want to pin an installation to a specific release.
 
 ---
 
