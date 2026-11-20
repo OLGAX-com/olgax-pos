@@ -75,7 +75,8 @@
     "actions": "Ações",
     "refund": "Reembolsar",
     "no_sales": "Nenhuma venda ainda",
-    "export": "Exportar CSV"
+    "export": "Exportar CSV",
+    "tax": "Imposto"
   },
   "customers": {
     "title": "Clientes",
@@ -143,7 +144,9 @@
     "no_sales_data": "Nenhuma venda ainda",
     "all_stocked": "Todos os produtos estão bem estocados",
     "exclude_refunds": "Excluir reembolsos da receita",
-    "threshold": "Limite"
+    "threshold": "Limite",
+    "tax": "Imposto",
+    "net_tax": "Imposto líquido"
   },
   "settings": {
     "title": "Configurações",

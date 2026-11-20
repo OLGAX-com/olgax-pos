@@ -115,6 +115,7 @@ describe("RefundReceiptModal", () => {
           saleId="sale-456"
           items={[{ name: "Croissant", quantity: 1, price: 400, total: 400 }]}
           refundTotal={400}
+          taxAmount={0}
           reason="Damaged item"
         />,
         { container: appWrapper }

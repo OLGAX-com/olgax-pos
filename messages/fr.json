@@ -75,7 +75,8 @@
     "actions": "Actions",
     "refund": "Rembourser",
     "no_sales": "Aucune vente",
-    "export": "Exporter CSV"
+    "export": "Exporter CSV",
+    "tax": "Taxe"
   },
   "customers": {
     "title": "Clients",
@@ -143,7 +144,9 @@
     "no_sales_data": "Aucune vente pour l'instant",
     "all_stocked": "Tous les produits sont bien stockés",
     "exclude_refunds": "Exclure les remboursements du CA",
-    "threshold": "Seuil"
+    "threshold": "Seuil",
+    "tax": "Taxe",
+    "net_tax": "Taxe nette"
   },
   "settings": {
     "title": "Paramètres",

@@ -4,6 +4,7 @@ import { Fragment, useState } from "react";
 import { useTranslations } from "next-intl";
 import { RotateCcw } from "lucide-react";
 import { useFormatCurrency } from "@/contexts/settings-context";
+import { allocateTax } from "@/lib/tax";
 import { RefundModal } from "./refund-modal";
 
 interface SaleItem {
@@ -20,6 +21,7 @@ interface Sale {
   id: string;
   createdAt: Date;
   total: { toString(): string };
+  taxAmount: { toString(): string };
   paymentMethod: string;
   status: string;
   items: SaleItem[];
@@ -65,6 +67,7 @@ export function SalesTable({ sales }: SalesTableProps) {
             <th className="px-4 py-3 text-left font-medium">{t("payment")}</th>
             <th className="px-4 py-3 text-left font-medium">{t("status")}</th>
             <th className="px-4 py-3 text-right font-medium">{t("total")}</th>
+            <th className="px-4 py-3 text-right font-medium">{t("tax")}</th>
             <th className="px-4 py-3 text-center font-medium">{t("actions")}</th>
           </tr>
         </thead>
@@ -98,6 +101,9 @@ export function SalesTable({ sales }: SalesTableProps) {
                 <td className="px-4 py-3 text-right font-medium">
                   {formatCurrency(parseFloat(sale.total.toString()))}
                 </td>
+                <td className="px-4 py-3 text-right text-muted-foreground">
+                  {formatCurrency(parseFloat(sale.taxAmount.toString()))}
+                </td>
                 <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
                   <div className="flex items-center justify-center">
                     {sale.status === "COMPLETED" && (
@@ -118,9 +124,17 @@ export function SalesTable({ sales }: SalesTableProps) {
               return [mainRow];
             }
 
+            // Each item's share of the sale tax, in proportion to its total.
+            // The shares add up to the sale's tax amount.
+            const saleTax = parseFloat(sale.taxAmount.toString());
+            const itemTaxes = allocateTax(
+              sale.items.map((item) => parseFloat(item.total.toString())),
+              saleTax
+            );
+
             const detailRow = (
               <tr className="bg-muted/20" key={`${saleKey}-details`}>
-                <td colSpan={6} className="px-6 py-3">
+                <td colSpan={7} className="px-6 py-3">
                   <table className="w-full text-xs">
                     <thead>
                       <tr>
@@ -128,6 +142,7 @@ export function SalesTable({ sales }: SalesTableProps) {
                         <th className="text-right py-1">{tr("qty")}</th>
                         <th className="text-right py-1">{tr("price")}</th>
                         <th className="text-right py-1">{t("total")}</th>
+                        <th className="text-right py-1">{t("tax")}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -144,16 +159,25 @@ export function SalesTable({ sales }: SalesTableProps) {
                               <td className="text-right py-1">
                                 {formatCurrency(parseFloat(item.total.toString()))}
                               </td>
+                              <td className="text-right py-1">
+                                {formatCurrency(itemTaxes[i])}
+                              </td>
                             </tr>
                             {item.notes && (
                               <tr>
-                                <td colSpan={4} className="pb-1 pl-3 text-[10px] italic text-muted-foreground">{item.notes}</td>
+                                <td colSpan={5} className="pb-1 pl-3 text-[10px] italic text-muted-foreground">{item.notes}</td>
                               </tr>
                             )}
                           </Fragment>
                         );
                       })}
                     </tbody>
+                    <tfoot>
+                      <tr className="border-t font-medium">
+                        <td colSpan={4} className="text-right py-1">{t("tax")}</td>
+                        <td className="text-right py-1">{formatCurrency(saleTax)}</td>
+                      </tr>
+                    </tfoot>
                   </table>
                 </td>
               </tr>
@@ -169,6 +193,7 @@ export function SalesTable({ sales }: SalesTableProps) {
       <RefundModal
         saleId={refunding.id}
         saleTotal={parseFloat(refunding.total.toString())}
+        saleTax={parseFloat(refunding.taxAmount.toString())}
         items={refunding.items}
         onClose={() => setRefunding(null)}
       />

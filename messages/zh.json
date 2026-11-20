@@ -75,7 +75,8 @@
     "actions": "操作",
     "refund": "退款",
     "no_sales": "暂无销售记录",
-    "export": "导出 CSV"
+    "export": "导出 CSV",
+    "tax": "税费"
   },
   "customers": {
     "title": "客户",
@@ -143,7 +144,9 @@
     "no_sales_data": "暂无销售数据",
     "all_stocked": "所有商品库存充足",
     "exclude_refunds": "从营收中排除退款",
-    "threshold": "阈值"
+    "threshold": "阈值",
+    "tax": "税费",
+    "net_tax": "净税费"
   },
   "settings": {
     "title": "设置",

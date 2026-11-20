@@ -75,7 +75,8 @@
     "actions": "कार्रवाई",
     "refund": "रिफंड",
     "no_sales": "अभी कोई बिक्री नहीं",
-    "export": "CSV निर्यात"
+    "export": "CSV निर्यात",
+    "tax": "कर"
   },
   "customers": {
     "title": "ग्राहक",
@@ -143,7 +144,9 @@
     "no_sales_data": "अभी कोई बिक्री नहीं",
     "all_stocked": "सभी उत्पादों में पर्याप्त स्टॉक है",
     "exclude_refunds": "राजस्व से रिफंड हटाएं",
-    "threshold": "सीमा"
+    "threshold": "सीमा",
+    "tax": "कर",
+    "net_tax": "शुद्ध कर"
   },
   "settings": {
     "title": "सेटिंग",

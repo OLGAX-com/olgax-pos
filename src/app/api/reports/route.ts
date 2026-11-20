@@ -48,6 +48,7 @@ export async function GET(req: NextRequest) {
         id: true,
         total: true,
         subtotal: true,
+        taxAmount: true,
         discountAmount: true,
         tipAmount: true,
         paymentMethod: true,
@@ -77,7 +78,7 @@ export async function GET(req: NextRequest) {
     prisma.refund.aggregate({
       where: { createdAt: { gte: start, lte: end } },
       _count: { id: true },
-      _sum: { amount: true },
+      _sum: { amount: true, taxAmount: true },
     }),
     prisma.product.findMany({
       where: { active: true },
@@ -89,8 +90,9 @@ export async function GET(req: NextRequest) {
 
   const lowStock = lowStockProducts.filter((p) => p.stock <= p.lowStockThreshold);
 
-  const byDay: Record<string, { revenue: number; transactions: number }> = {};
+  const byDay: Record<string, { revenue: number; tax: number; transactions: number }> = {};
   let totalRevenue = 0;
+  let totalTax = 0;
   let totalTips = 0;
   let totalGrossProfit = 0;
   const paymentBreakdown: Record<string, number> = { CASH: 0, CARD: 0, OTHER: 0 };
@@ -98,11 +100,14 @@ export async function GET(req: NextRequest) {
 
   for (const sale of sales) {
     const day = sale.createdAt.toISOString().slice(0, 10);
-    if (!byDay[day]) byDay[day] = { revenue: 0, transactions: 0 };
+    if (!byDay[day]) byDay[day] = { revenue: 0, tax: 0, transactions: 0 };
     const rev = parseFloat(sale.total.toString());
+    const tax = parseFloat(sale.taxAmount.toString());
     byDay[day].revenue += rev;
+    byDay[day].tax += tax;
     byDay[day].transactions += 1;
     totalRevenue += rev;
+    totalTax += tax;
     totalTips += parseFloat((sale.tipAmount ?? 0).toString());
     if (sale.customer?.id) uniqueCustomers.add(sale.customer.id);
 
@@ -140,6 +145,8 @@ export async function GET(req: NextRequest) {
       voidedCount,
       refundCount: refundSummary._count.id,
       refundTotal: parseFloat((refundSummary._sum.amount ?? 0).toString()),
+      tax: totalTax,
+      refundTax: parseFloat((refundSummary._sum.taxAmount ?? 0).toString()),
       customerVisits: uniqueCustomers.size,
     },
     revenueByDay,
