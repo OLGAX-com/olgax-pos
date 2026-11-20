@@ -75,7 +75,8 @@
     "actions": "Aksi",
     "refund": "Refund",
     "no_sales": "Belum ada penjualan",
-    "export": "Ekspor CSV"
+    "export": "Ekspor CSV",
+    "tax": "Pajak"
   },
   "customers": {
     "title": "Pelanggan",
@@ -143,7 +144,9 @@
     "no_sales_data": "Belum ada data penjualan",
     "all_stocked": "Semua produk stok mencukupi",
     "exclude_refunds": "Kecualikan pengembalian dari pendapatan",
-    "threshold": "Ambang batas"
+    "threshold": "Ambang batas",
+    "tax": "Pajak",
+    "net_tax": "Pajak bersih"
   },
   "settings": {
     "title": "Pengaturan",

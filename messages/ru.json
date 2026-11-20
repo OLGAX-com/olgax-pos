@@ -75,7 +75,8 @@
     "actions": "Действия",
     "refund": "Возврат",
     "no_sales": "Продаж пока нет",
-    "export": "Экспорт CSV"
+    "export": "Экспорт CSV",
+    "tax": "Налог"
   },
   "customers": {
     "title": "Клиенты",
@@ -143,7 +144,9 @@
     "no_sales_data": "Продаж пока нет",
     "all_stocked": "Все товары в наличии",
     "exclude_refunds": "Исключить возвраты из выручки",
-    "threshold": "Порог"
+    "threshold": "Порог",
+    "tax": "Налог",
+    "net_tax": "Чистый налог"
   },
   "settings": {
     "title": "Настройки",

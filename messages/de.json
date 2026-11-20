@@ -75,7 +75,8 @@
     "actions": "Aktionen",
     "refund": "Rückerstattung",
     "no_sales": "Noch keine Verkäufe",
-    "export": "CSV exportieren"
+    "export": "CSV exportieren",
+    "tax": "Steuer"
   },
   "customers": {
     "title": "Kunden",
@@ -143,7 +144,9 @@
     "no_sales_data": "Noch keine Verkäufe",
     "all_stocked": "Alle Produkte sind ausreichend bevorratet",
     "exclude_refunds": "Rückerstattungen vom Umsatz ausschließen",
-    "threshold": "Schwellenwert"
+    "threshold": "Schwellenwert",
+    "tax": "Steuer",
+    "net_tax": "Netto-Steuer"
   },
   "settings": {
     "title": "Einstellungen",

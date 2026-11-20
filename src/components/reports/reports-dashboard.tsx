@@ -29,10 +29,12 @@ interface Summary {
   voidedCount: number;
   refundCount: number;
   refundTotal: number;
+  tax: number;
+  refundTax: number;
   customerVisits: number;
 }
 
-interface RevenueDay { date: string; revenue: number; transactions: number }
+interface RevenueDay { date: string; revenue: number; tax: number; transactions: number }
 interface PieSlice { method: string; value: number }
 interface TopProduct { name: string; qty: number; revenue: number }
 interface LowStockProduct { id: string; name: string; sku: string | null; stock: number; lowStockThreshold: number; category: string | null }
@@ -108,8 +110,8 @@ export function ReportsDashboard() {
     rows.push([]);
 
     rows.push(["REVENUE BY DAY"]);
-    rows.push(["Date", "Revenue", "Transactions"]);
-    revenueByDay.forEach(d => rows.push([d.date, formatCurrency(d.revenue), String(d.transactions)]));
+    rows.push(["Date", "Revenue", "Tax", "Transactions"]);
+    revenueByDay.forEach(d => rows.push([d.date, formatCurrency(d.revenue), formatCurrency(d.tax), String(d.transactions)]));
     rows.push([]);
 
     rows.push(["PAYMENT METHODS"]);
@@ -133,6 +135,12 @@ export function ReportsDashboard() {
           value: formatCurrency(excludeRefunds
             ? Math.max(0, summary.revenue - (summary.refundTotal ?? 0))
             : summary.revenue),
+        },
+        {
+          label: excludeRefunds ? t("net_tax") : t("tax"),
+          value: formatCurrency(excludeRefunds
+            ? Math.max(0, summary.tax - (summary.refundTax ?? 0))
+            : summary.tax),
         },
         { label: t("gross_profit"), value: formatCurrency(summary.grossProfit ?? 0) },
         { label: t("transactions"), value: summary.transactions.toString() },

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { X, RotateCcw } from "lucide-react";
 import { useFormatCurrency } from "@/contexts/settings-context";
 import { RefundReceiptModal } from "@/components/receipt/refund-receipt-modal";
+import { taxShare } from "@/lib/tax";
 
 interface RefundItem {
   saleItemId: string;
@@ -17,17 +18,19 @@ interface RefundItem {
 interface RefundModalProps {
   saleId: string;
   saleTotal: number;
+  saleTax: number;
   items: {
     id: string;
     name: string;
     quantity: number;
     price: { toString(): string };
+    total: { toString(): string };
     productId?: string | null;
   }[];
   onClose: () => void;
 }
 
-export function RefundModal({ saleId, saleTotal, items, onClose }: RefundModalProps) {
+export function RefundModal({ saleId, saleTotal, saleTax, items, onClose }: RefundModalProps) {
   const formatCurrency = useFormatCurrency();
   const router = useRouter();
   const [selected, setSelected] = useState<Set<string>>(() => new Set(items.map((i) => i.id)));
@@ -41,6 +44,7 @@ export function RefundModal({ saleId, saleTotal, items, onClose }: RefundModalPr
   const [showReceipt, setShowReceipt] = useState(false);
   const [committedItems, setCommittedItems] = useState<{ name: string; quantity: number; price: number; total: number }[]>([]);
   const [committedTotal, setCommittedTotal] = useState(0);
+  const [committedTax, setCommittedTax] = useState(0);
   const [committedReason, setCommittedReason] = useState("");
 
   const selectedItems = items.filter((i) => selected.has(i.id));
@@ -48,6 +52,8 @@ export function RefundModal({ saleId, saleTotal, items, onClose }: RefundModalPr
     (sum, i) => sum + parseFloat(i.price.toString()) * (qtys[i.id] ?? i.quantity),
     0
   );
+  // Tax on the refunded items: the sale's tax split by item value, as the report does
+  const refundTax = refundTotal * taxShare(saleTax, items.map((i) => parseFloat(i.total.toString())));
 
   function toggleItem(id: string) {
     setSelected((prev) => {
@@ -75,10 +81,8 @@ export function RefundModal({ saleId, saleTotal, items, onClose }: RefundModalPr
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ reason: reason || undefined, restoreStock, items: refundItems }),
       });
-      if (!res.ok) {
-        const d = await res.json();
-        throw new Error(d.error ?? "Refund failed");
-      }
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.error ?? "Refund failed");
       // Save data for receipt before clearing state
       const receiptItems = selectedItems.map((i) => ({
         name: i.name,
@@ -88,6 +92,8 @@ export function RefundModal({ saleId, saleTotal, items, onClose }: RefundModalPr
       }));
       setCommittedItems(receiptItems);
       setCommittedTotal(refundTotal);
+      // Use the tax the server saved, so the receipt matches the refund record
+      setCommittedTax(parseFloat(d.refund.taxAmount));
       setCommittedReason(reason);
       router.refresh();
       setShowReceipt(true);
@@ -106,6 +112,7 @@ export function RefundModal({ saleId, saleTotal, items, onClose }: RefundModalPr
         saleId={saleId}
         items={committedItems}
         refundTotal={committedTotal}
+        taxAmount={committedTax}
         reason={committedReason || undefined}
       />
 
@@ -181,9 +188,19 @@ export function RefundModal({ saleId, saleTotal, items, onClose }: RefundModalPr
           </div>
 
           {/* Refund total */}
-          <div className="flex items-center justify-between rounded-lg bg-muted/50 px-4 py-2.5">
-            <span className="text-sm font-medium">Refund Amount</span>
-            <span className="text-lg font-bold text-destructive">{formatCurrency(refundTotal)}</span>
+          <div className="space-y-1 rounded-lg bg-muted/50 px-4 py-2.5">
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <span>Subtotal</span>
+              <span>{formatCurrency(refundTotal)}</span>
+            </div>
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <span>Tax</span>
+              <span>{formatCurrency(refundTax)}</span>
+            </div>
+            <div className="flex items-center justify-between pt-1">
+              <span className="text-sm font-medium">Refund Amount</span>
+              <span className="text-lg font-bold text-destructive">{formatCurrency(refundTotal + refundTax)}</span>
+            </div>
           </div>
 
           {/* Reason */}
@@ -221,7 +238,7 @@ export function RefundModal({ saleId, saleTotal, items, onClose }: RefundModalPr
               disabled={saving || selectedItems.length === 0}
               className="flex-1 rounded-lg bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground hover:bg-destructive/90 disabled:opacity-60 transition-colors"
             >
-              {saving ? "Processing…" : `Refund ${formatCurrency(refundTotal)}`}
+              {saving ? "Processing…" : `Refund ${formatCurrency(refundTotal + refundTax)}`}
             </button>
           </div>
         </form>

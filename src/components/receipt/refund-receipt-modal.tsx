@@ -17,6 +17,7 @@ interface RefundReceiptModalProps {
   saleId?: string;
   items: RefundItem[];
   refundTotal: number;
+  taxAmount: number;
   reason?: string;
 }
 
@@ -44,6 +45,7 @@ export function RefundReceiptModal({
   saleId,
   items,
   refundTotal,
+  taxAmount,
   reason,
 }: RefundReceiptModalProps) {
   const [settings, setSettings] = useState<ReceiptSettings>(FALLBACK_SETTINGS);
@@ -61,8 +63,8 @@ export function RefundReceiptModal({
     items,
     subtotal: refundTotal,
     discountAmount: 0,
-    taxAmount: 0,
-    total: refundTotal,
+    taxAmount,
+    total: refundTotal + taxAmount,
     paymentMethod: "REFUND",
     customerName: reason ? `Reason: ${reason}` : undefined,
   };

@@ -75,7 +75,8 @@
     "actions": "Actions",
     "refund": "Refund",
     "no_sales": "No sales yet",
-    "export": "Export CSV"
+    "export": "Export CSV",
+    "tax": "Tax"
   },
   "customers": {
     "title": "Customers",
@@ -143,7 +144,9 @@
     "no_sales_data": "No sales data yet",
     "all_stocked": "All products are well stocked",
     "exclude_refunds": "Exclude refunds from revenue",
-    "threshold": "Threshold"
+    "threshold": "Threshold",
+    "tax": "Tax",
+    "net_tax": "Net Tax"
   },
   "settings": {
     "title": "Settings",

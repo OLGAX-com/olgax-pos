@@ -75,7 +75,8 @@
     "actions": "操作",
     "refund": "返金",
     "no_sales": "売上がありません",
-    "export": "CSV エクスポート"
+    "export": "CSV エクスポート",
+    "tax": "税金"
   },
   "customers": {
     "title": "顧客",
@@ -143,7 +144,9 @@
     "no_sales_data": "売上データなし",
     "all_stocked": "すべての商品の在庫は十分です",
     "exclude_refunds": "売上から返金を除外",
-    "threshold": "しきい値"
+    "threshold": "しきい値",
+    "tax": "税金",
+    "net_tax": "純税額"
   },
   "settings": {
     "title": "設定",

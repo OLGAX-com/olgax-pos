@@ -75,7 +75,8 @@
     "actions": "작업",
     "refund": "환불",
     "no_sales": "판매 내역이 없습니다",
-    "export": "CSV 내보내기"
+    "export": "CSV 내보내기",
+    "tax": "세금"
   },
   "customers": {
     "title": "고객",
@@ -143,7 +144,9 @@
     "no_sales_data": "판매 데이터 없음",
     "all_stocked": "모든 상품의 재고가 충분합니다",
     "exclude_refunds": "매출에서 환불 제외",
-    "threshold": "임계값"
+    "threshold": "임계값",
+    "tax": "세금",
+    "net_tax": "순 세금"
   },
   "settings": {
     "title": "설정",

@@ -75,7 +75,8 @@
     "actions": "ක්‍රියා",
     "refund": "ආපසු ගෙවීම",
     "no_sales": "විකිණුම් නොමැත",
-    "export": "CSV අපනයනය"
+    "export": "CSV අපනයනය",
+    "tax": "බදු"
   },
   "customers": {
     "title": "ගනුදෙනුකරුවන්",
@@ -143,7 +144,9 @@
     "no_sales_data": "විකිණුම් දත්ත නොමැත",
     "all_stocked": "සියලු නිෂ්පාදන හොඳින් තොග ඇත",
     "exclude_refunds": "ආදායමෙන් ආපසු ගෙවීම් ඉවත් කරන්න",
-    "threshold": "සීමාව"
+    "threshold": "සීමාව",
+    "tax": "බදු",
+    "net_tax": "ශුද්ධ බදු"
   },
   "settings": {
     "title": "සැකසීම්",

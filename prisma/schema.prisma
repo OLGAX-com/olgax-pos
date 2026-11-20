@@ -262,6 +262,7 @@ model Refund {
   saleId     String
   userId     String
   amount     Decimal  @db.Decimal(10, 2)
+  taxAmount  Decimal  @default(0) @db.Decimal(10, 2)
   reason     String?
   items      Json
   restoreStock Boolean @default(true)

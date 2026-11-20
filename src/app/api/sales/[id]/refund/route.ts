@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { z } from "zod";
+import { taxShare } from "@/lib/tax";
 
 const refundSchema = z.object({
   reason: z.string().optional(),
@@ -35,7 +36,11 @@ export async function POST(
   if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
 
   const { reason, restoreStock, items } = parsed.data;
-  const refundAmount = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
+  const preTaxAmount = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
+  // Refund the tax share of the refunded items too, so it matches the sale's tax
+  const itemTotals = sale.items.map((i) => parseFloat(i.total.toString()));
+  const refundTax = Math.round(preTaxAmount * taxShare(parseFloat(sale.taxAmount.toString()), itemTotals) * 100) / 100;
+  const refundAmount = Math.round((preTaxAmount + refundTax) * 100) / 100;
 
   const refund = await prisma.$transaction(async (tx) => {
     const r = await tx.refund.create({
@@ -43,6 +48,7 @@ export async function POST(
         saleId,
         userId: session.user.id,
         amount: refundAmount,
+        taxAmount: refundTax,
         reason: reason || null,
         items: items,
         restoreStock,
